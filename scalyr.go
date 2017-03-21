@@ -1,0 +1,44 @@
+package scalyr
+
+import "fmt"
+
+const SCALYR_BASE_ENDPOINT = "https://www.scalyr.com/"
+const SCALYR_ADDEVNTS_ENDPOINT = SCALYR_BASE_ENDPOINT + "addEvents"
+
+/*
+
+SAMPLE REQUEST:
+
+{
+  "token": "xxx",
+  "session": "149d8290-7871-11e1-b0c4-0800200c9a66",
+  "sessionInfo": {
+    "serverType": "frontend",
+    "serverId": "prod-front-2"},
+  "events": [
+    {
+      "thread": "1",
+      "ts": "1332851837424000000",
+      "type": 0,
+      "sev": 3,
+      "attrs": {
+        "message": "record retrieved",
+        "recordId": 39217,
+        "latency": 19.4,
+        "length": 39207
+      }
+    }
+  ],
+  "threads": [
+    {"id": 1, "name": "request handler thread"},
+    {"id": 2, "name": "background processing thread"}
+  ]
+}
+
+*/
+
+func Main() {
+
+	fmt.Println("here in scalyr agent...")
+
+}
