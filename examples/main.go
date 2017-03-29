@@ -3,15 +3,21 @@ package main
 import (
 	"fmt"
 	"os"
+
+	scalyr "github.com/mickeyyawn/scalyr-go-agent"
 )
 
 func main() {
+
+	key := os.Getenv("SCALYR_KEY")
+
+	config := scalyr.NewConfig(true, "my-awesome-server", key)
+	log := scalyr.NewApplication(config)
 
 	fmt.Println("about to exercise the scalyr agent...")
 	//
 	// for testing purposes let's grab the key from an env var
 	//
-	key := os.Getenv("SCALYR_KEY")
 
 	//
 	// let's mock up some events we want to push into scalyr
@@ -50,19 +56,19 @@ func main() {
 	// in the UI.
 
 	for i := 0; i < 3; i++ {
-		Event(Warning, oneLiner)
+		log.Event(scalyr.Warning, oneLiner)
 	}
 
 	for i := 0; i < 3; i++ {
-		Event(Info, multipleLines)
+		log.Event(scalyr.Info, multipleLines)
 	}
 
 	for i := 0; i < 3; i++ {
-		Event(Info, includeMessage)
+		log.Event(scalyr.Info, includeMessage)
 	}
 
 	for i := 0; i < 3; i++ {
-		Event(Error, oneLineWithMessage)
+		log.Event(scalyr.Error, oneLineWithMessage)
 	}
 
 	// Now log into your Scalyr account and you will see your events.
