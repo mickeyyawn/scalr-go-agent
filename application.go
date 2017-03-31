@@ -11,6 +11,8 @@ import (
 )
 
 var _config Config
+var _scalyrEventsWrapper scalyrEventsWrapper
+var _scalyrEvents []scalyrEvent
 
 type Application interface {
 	Event(sev Severity, attributes interface{})
@@ -29,13 +31,6 @@ func (app *app) Event(sev Severity, attributes interface{}) {
 	//Print(message)
 	//Print(string(sev))
 
-	// TODO:  test for scalyr api key being present...
-
-	si := &scalyrSessionInfo{
-		ServerType: "server type...",
-		ServerId:   _APPLICATION_HOSTNAME,
-	}
-
 	se := &scalyrEvent{
 		TS:    strconv.FormatInt(time.Now().UnixNano(), 10),
 		Type:  0,
@@ -43,17 +38,63 @@ func (app *app) Event(sev Severity, attributes interface{}) {
 		Attrs: attributes,
 	}
 
-	events := make([]scalyrEvent, 1)
-	events[0] = *se
+	if _scalyrEvents == nil {
 
-	ses := &scalyrEvents{
+		_scalyrEvents := make([]scalyrEvent, 1)
+		_scalyrEvents[0] = *se
+
+	} else {
+		_scalyrEvents = append(_scalyrEvents, *se)
+	}
+
+}
+
+//
+// returns a new config struct configured with values...
+//
+func NewApplication(config Config) Application {
+
+	_config = config
+
+	a := &app{}
+
+	initialize()
+
+	start()
+
+	return a
+}
+
+func initialize() {
+	si := &scalyrSessionInfo{
+		ServerType: "server type...",
+		ServerId:   _APPLICATION_HOSTNAME,
+	}
+
+	_scalyrEventsWrapper := &scalyrEventsWrapper{
 		Token:       _config.ScalyrEventWriteKey,
 		Session:     _APPLICATION_PROCESS_ID,
 		SessionInfo: *si,
-		Events:      events,
+		Events:      nil,
 	}
 
-	json, _ := json.Marshal(ses)
+	Print(_config.LocalLog, "Events wrapper created: ", _scalyrEventsWrapper)
+}
+
+func start() {
+
+	go func() {
+		for range ticker.C {
+			flush()
+		}
+	}()
+
+}
+
+func flush() {
+	Print(_config.LocalLog, "Flushing events NOW. ", nil)
+
+	json, _ := json.Marshal(_scalyrEvents)
 	fmt.Println(string(json))
 
 	url := _SCALYR_ADDEVENTS_ENDPOINT
@@ -73,38 +114,3 @@ func (app *app) Event(sev Severity, attributes interface{}) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
 }
-
-//
-// returns a new config struct configured with values...
-//
-func NewApplication(config Config) Application {
-
-	_config = config
-
-	a := &app{}
-
-	start()
-
-	return a
-}
-
-func start() {
-	ticker := time.NewTicker(time.Millisecond * 20000)
-
-	go func() {
-		for t := range ticker.C {
-			fmt.Println("Tick at", t)
-			//
-			//
-			// DO SOME WORK HERE!!!  push logs. etc...
-			//
-			//
-			//
-		}
-	}()
-}
-
-/*
-func Event(sev Severity, attributes interface{}) {
-
-} */

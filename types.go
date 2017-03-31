@@ -14,7 +14,7 @@ type scalyrSessionInfo struct {
 	ServerId   string `json:"serverId"`
 }
 
-type scalyrEvents struct {
+type scalyrEventsWrapper struct {
 	Token       string            `json:"token"`
 	Session     string            `json:"session"`
 	SessionInfo scalyrSessionInfo `json:"sessionInfo"`

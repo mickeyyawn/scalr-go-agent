@@ -1,11 +1,16 @@
 package scalyr
 
+import "time"
+
 const _SCALYR_BASE_ENDPOINT = "https://www.scalyr.com/"
 const _SCALYR_ADDEVENTS_ENDPOINT = _SCALYR_BASE_ENDPOINT + "addEvents"
 
-//var _SCALYR_KEY = os.Getenv("SCALYR_KEY")
 var _APPLICATION_PROCESS_ID = UUID()
 var _APPLICATION_HOSTNAME = HostName()
+
+// TODO rename this var name !!
+
+var ticker = time.NewTicker(time.Millisecond * 5000) // every 5 seconds
 
 type Config struct {
 
@@ -37,6 +42,9 @@ func NewConfig(localLog bool, logTag string, scalyrEventWriteKey string) Config 
 	c := Config{}
 
 	c.LocalLog = localLog
+	//
+	// TODO:  test for scalyr api key being present...
+	//
 	c.ScalyrEventWriteKey = scalyrEventWriteKey
 	c.LogTag = logTag
 

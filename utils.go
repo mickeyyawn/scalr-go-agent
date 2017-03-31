@@ -5,10 +5,22 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"time"
 )
 
-func Print(line string) {
-	fmt.Println(line)
+func Print(enabled bool, line string, object interface{}) {
+
+	if enabled {
+		if object != nil {
+
+		} else {
+
+		}
+		fmt.Println(time.Now(), line)
+		fmt.Println("")
+		fmt.Println(object)
+		fmt.Println("")
+	}
 }
 
 func Int32ToString(n int32) string {

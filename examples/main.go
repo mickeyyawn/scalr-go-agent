@@ -3,15 +3,24 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	scalyr "github.com/mickeyyawn/scalyr-go-agent"
 )
 
+func forever() {
+	for {
+		fmt.Printf("%v+\n", time.Now())
+		time.Sleep(time.Second)
+	}
+}
+
 func main() {
 
-	key := os.Getenv("SCALYR_KEY")
-
-	config := scalyr.NewConfig(true, "my-awesome-server", key)
+	//
+	//
+	//
+	config := scalyr.NewConfig(true, "my-awesome-server", os.Getenv("SCALYR_KEY"))
 	log := scalyr.NewApplication(config)
 
 	fmt.Println("about to exercise the scalyr agent...")
@@ -47,7 +56,7 @@ func main() {
 	// and just another example of setting everything on one line...
 	//
 
-	oneLineWithMessage := map[string]interface{}{"a": "banana", "b": 22, "message": "my most awesome message is here...."}
+	oneLineWithMessage := map[string]interface{}{"a": "strawberry", "b": 22, "message": "my most awesome message is here...."}
 
 	//
 	// ok, let's pass those events into Scalyr, note we are
@@ -74,5 +83,12 @@ func main() {
 	// Now log into your Scalyr account and you will see your events.
 
 	fmt.Println("done exercising the scalyr agent...")
+
+	//
+	// simulate a running webserver or another type of process
+	//
+	// NOTE:  the scalyr agent is designed to batch events and flush them (push them up to scalyr api) periodically...
+	//
+	forever()
 
 }
