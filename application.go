@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 )
 
 var _config Config
 var _scalyrEventsWrapper scalyrEventsWrapper
 var _scalyrEvents []scalyrEvent
+var mutex = &sync.Mutex{}
 
 type Application interface {
 	Event(sev Severity, attributes interface{})
@@ -81,7 +83,7 @@ func start() {
 
 	go func() {
 		for range ticker.C {
-			flush()
+			go flush()
 		}
 	}()
 
@@ -89,6 +91,8 @@ func start() {
 
 func flush() {
 	Print("Flushing events NOW. ", nil)
+
+	mutex.Lock()
 
 	_scalyrEventsWrapper.Events = _scalyrEvents
 
@@ -107,6 +111,13 @@ func flush() {
 	if err != nil {
 		//panic(err)
 		Print("ERROR trying to POST to Scalyr API:", err)
+	} else {
+
+		//
+		// TODO check for 200, raise err if it is not good...
+		//
+		_scalyrEvents = _scalyrEvents[:0]
+		mutex.Unlock()
 	}
 	defer resp.Body.Close()
 
