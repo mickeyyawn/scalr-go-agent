@@ -26,8 +26,6 @@ type app struct {
 //  classic scale "finest, finer, fine, info, warning, error, fatal". This field is optional (defaults to 3 / info).
 //
 func (app *app) Event(sev Severity, attributes interface{}) {
-	//Print(message)
-	//Print(string(sev))
 
 	se := &scalyrEvent{
 		TS:    strconv.FormatInt(time.Now().UnixNano(), 10),
@@ -107,7 +105,8 @@ func flush() {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		//panic(err)
+		Print("ERROR trying to POST to Scalyr API:", err)
 	}
 	defer resp.Body.Close()
 
