@@ -38,7 +38,7 @@ func (app *app) Event(sev Severity, attributes interface{}) {
 
 	if _scalyrEvents == nil {
 
-		_scalyrEvents := make([]scalyrEvent, 1)
+		_scalyrEvents = make([]scalyrEvent, 1)
 		_scalyrEvents[0] = *se
 
 	} else {
