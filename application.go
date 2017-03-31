@@ -3,8 +3,6 @@ package scalyr
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
@@ -97,10 +95,12 @@ func flush() {
 	_scalyrEventsWrapper.Events = _scalyrEvents
 
 	json, _ := json.Marshal(_scalyrEventsWrapper)
-	fmt.Println(string(json))
+
+	Print(_config.LocalLog, "Events being sent to scalyre: ", string(json))
+	//fmt.Println(string(json))
 
 	url := _SCALYR_ADDEVENTS_ENDPOINT
-	fmt.Println("URL:>", url)
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(json))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -111,8 +111,10 @@ func flush() {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	Print(_config.LocalLog, "Status that came back from Scalyr: ", resp.Status)
+
+	//fmt.Println("response Status:", resp.Status)
+	//fmt.Println("response Headers:", resp.Header)
+	//body, _ := ioutil.ReadAll(resp.Body)
+	//fmt.Println("response Body:", string(body))
 }
