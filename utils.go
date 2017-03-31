@@ -11,15 +11,14 @@ import (
 func Print(enabled bool, line string, object interface{}) {
 
 	if enabled {
-		if object != nil {
 
-		} else {
-
-		}
 		fmt.Println(time.Now(), line)
-		fmt.Println("")
-		fmt.Println(object)
-		fmt.Println("")
+		if object != nil {
+			fmt.Println("")
+			fmt.Println(object)
+			fmt.Println("")
+		}
+
 	}
 }
 

@@ -65,11 +65,11 @@ func NewApplication(config Config) Application {
 
 func initialize() {
 	si := &scalyrSessionInfo{
-		ServerType: "server type...",
+		ServerType: "server type here TODO replace this...",
 		ServerId:   _APPLICATION_HOSTNAME,
 	}
 
-	_scalyrEventsWrapper := &scalyrEventsWrapper{
+	_scalyrEventsWrapper = scalyrEventsWrapper{
 		Token:       _config.ScalyrEventWriteKey,
 		Session:     _APPLICATION_PROCESS_ID,
 		SessionInfo: *si,
