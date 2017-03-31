@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-func Print(enabled bool, line string, object interface{}) {
+func Print(line string, object interface{}) {
 
-	if enabled {
+	if _config.Debug {
 
 		fmt.Println(time.Now(), line)
 		if object != nil {

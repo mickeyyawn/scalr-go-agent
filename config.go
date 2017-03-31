@@ -19,7 +19,7 @@ type Config struct {
 	// useful for when you are using the agent for the first time or
 	// for tracking down an issue....
 	//
-	LocalLog bool
+	Debug bool
 
 	//
 	// for now, just requiring the scalyr event write key...
@@ -37,11 +37,11 @@ type Config struct {
 //
 // returns a new config struct configured with values...
 //
-func NewConfig(localLog bool, logTag string, scalyrEventWriteKey string) Config {
+func NewConfig(debug bool, logTag string, scalyrEventWriteKey string) Config {
 
 	c := Config{}
 
-	c.LocalLog = localLog
+	c.Debug = debug
 	//
 	// TODO:  test for scalyr api key being present...
 	//

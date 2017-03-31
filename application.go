@@ -76,7 +76,7 @@ func initialize() {
 		Events:      nil,
 	}
 
-	Print(_config.LocalLog, "Events wrapper created: ", _scalyrEventsWrapper)
+	Print("Events wrapper created: ", _scalyrEventsWrapper)
 }
 
 func start() {
@@ -90,13 +90,13 @@ func start() {
 }
 
 func flush() {
-	Print(_config.LocalLog, "Flushing events NOW. ", nil)
+	Print("Flushing events NOW. ", nil)
 
 	_scalyrEventsWrapper.Events = _scalyrEvents
 
 	json, _ := json.Marshal(_scalyrEventsWrapper)
 
-	Print(_config.LocalLog, "Events being sent to scalyre: ", string(json))
+	Print("Events being sent to Scalyr: ", string(json))
 	//fmt.Println(string(json))
 
 	url := _SCALYR_ADDEVENTS_ENDPOINT
@@ -111,7 +111,7 @@ func flush() {
 	}
 	defer resp.Body.Close()
 
-	Print(_config.LocalLog, "Status that came back from Scalyr: ", resp.Status)
+	Print("Status that came back from Scalyr: ", resp.Status)
 
 	//fmt.Println("response Status:", resp.Status)
 	//fmt.Println("response Headers:", resp.Header)
