@@ -94,7 +94,9 @@ func start() {
 func flush() {
 	Print(_config.LocalLog, "Flushing events NOW. ", nil)
 
-	json, _ := json.Marshal(_scalyrEvents)
+	_scalyrEventsWrapper.Events = _scalyrEvents
+
+	json, _ := json.Marshal(_scalyrEventsWrapper)
 	fmt.Println(string(json))
 
 	url := _SCALYR_ADDEVENTS_ENDPOINT
